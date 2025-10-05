@@ -15,7 +15,8 @@ public class Product {
     private int price;
     private Double stock;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 

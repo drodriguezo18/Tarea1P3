@@ -14,10 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/categories")
@@ -45,6 +44,55 @@ public class CategoryRestController {
                 categoriesPage.getContent(), HttpStatus.OK, meta);
     }
 
+    @GetMapping("/{categoryId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getCategoryById(@PathVariable Long categoryId, HttpServletRequest request) {
+        Optional<Category> foundCategory = categoryRepository.findById(categoryId);
+        if (foundCategory.isPresent()) {
+            return new GlobalResponseHandler().handleResponse("Caregory retrieved successfully",
+                    foundCategory.get(), HttpStatus.OK, request);
+        } else {
+            return new GlobalResponseHandler().handleResponse("Team id " + categoryId + " not found",
+                    HttpStatus.NOT_FOUND, request);
+        }
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    public ResponseEntity<?> createCategory(@RequestBody Category category, HttpServletRequest request) {
+        Category savedCategory = categoryRepository.save(category);
+        return new GlobalResponseHandler().handleResponse("Category created successfully",
+                savedCategory, HttpStatus.CREATED, request);
+    }
+
+    @PutMapping("/{categoryId}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    public ResponseEntity<?> updateCategory(@PathVariable Long categoryId, @RequestBody Category category, HttpServletRequest request) {
+        Optional<Category> foundCategory = categoryRepository.findById(categoryId);
+        if (foundCategory.isPresent()) {
+            category.setId(foundCategory.get().getId());
+            categoryRepository.save(category);
+            return new GlobalResponseHandler().handleResponse("Category updated successfully",
+                    category, HttpStatus.OK, request);
+        } else {
+            return new GlobalResponseHandler().handleResponse("Category id " + categoryId + " not found",
+                    HttpStatus.NOT_FOUND, request);
+        }
+    }
+
+    @DeleteMapping("/{categoryId}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
+    public ResponseEntity<?> deleteTeam(@PathVariable Long categoryId, HttpServletRequest request) {
+        Optional<Category> foundCategory = categoryRepository.findById(categoryId);
+        if (foundCategory.isPresent()) {
+            categoryRepository.deleteById(categoryId);
+            return new GlobalResponseHandler().handleResponse("Category deleted successfully",
+                    foundCategory.get(), HttpStatus.OK, request);
+        } else {
+            return new GlobalResponseHandler().handleResponse("Category id " + categoryId + " not found",
+                    HttpStatus.NOT_FOUND, request);
+        }
+    }
 
 
 
