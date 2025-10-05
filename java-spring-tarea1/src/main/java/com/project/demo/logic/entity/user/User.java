@@ -47,7 +47,6 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Order> orders;
-    private List<Product> products;
 
     // Constructors
     public User() {}
@@ -143,9 +142,6 @@ public class User implements UserDetails {
         return orders;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
