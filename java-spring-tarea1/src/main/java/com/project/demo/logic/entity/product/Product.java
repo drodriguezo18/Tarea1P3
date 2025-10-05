@@ -10,12 +10,12 @@ import com.project.demo.logic.entity.user.User;
 @Entity
 public class Product {
     @Id
-    @GeneratedValue(startegy = GenerationType.IDENTITY)
+    @GeneratedValue()
     private Long id;
 
     private String name;
     private int price;
-    private int stock;
+    private Double stock;
     private String category;
 
 
@@ -33,8 +33,10 @@ public class Product {
     public int getPrice() {return price;}
     public void setPrice(int price) {this.price = price;}
 
-    public int getStock() {return stock;}
-    public void setStock(int stock) {this.stock = stock;}
+    public Double getStock() {
+        return stock;
+    }
+    public void setStock(Double stock) {this.stock = stock;}
 
     public String getCategory() {return category;}
     public void setCategory(String category) {this.category = category;}
