@@ -1,6 +1,5 @@
 package com.project.demo.logic.entity.user;
 import com.project.demo.logic.entity.order.Order;
-import com.project.demo.logic.entity.product.Product;
 import com.project.demo.logic.entity.rol.Role;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

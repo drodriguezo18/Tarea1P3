@@ -3,40 +3,32 @@ package com.project.demo.logic.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.util.List;
 
-@Entity
+
 @Table(name = "`product`")
+@Entity
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private int price;
     private Double stock;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
 
-    public Product() {
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private List<Category> categories;
 
+
+    public Product() {}
+
+    public List<Category> getCategory() {
+        return categories;
     }
-
-    public Product(String name, int price, Double stock, Category category) {
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.category = category;
-    }
-
-
-    public Category getCategory() {
-        return category;
-    }
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(List<Category> categories) {
+        this.categories = categories;
     }
 
     public Long getId() {return id;}

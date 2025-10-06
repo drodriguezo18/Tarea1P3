@@ -27,7 +27,6 @@ public class ProductRestController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-
     public ResponseEntity<?> getAllProducts(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -46,19 +45,6 @@ public class ProductRestController {
 
     }
 
-    @GetMapping("/{productId}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getProductById(@PathVariable Long productId, HttpServletRequest request) {
-        Optional<Product> foundProduct = productRepository.findById(productId);
-        if (foundProduct.isPresent()) {
-            return new GlobalResponseHandler().handleResponse("Product retrieved successfully",
-                    foundProduct.get(), HttpStatus.OK, request);
-        } else {
-            return new GlobalResponseHandler().handleResponse("Product id " + productId + " not found",
-                    HttpStatus.NOT_FOUND, request);
-        }
-    }
-
     @PostMapping
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     public ResponseEntity<?> registerProduct(@RequestBody Product product, HttpServletRequest request) {
@@ -70,10 +56,10 @@ public class ProductRestController {
     @PutMapping("/{productId}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     public ResponseEntity<?> updateProduct(@PathVariable Long productId, @RequestBody Product product, HttpServletRequest request) {
-        Optional<Product> foundProduct = productRepository.findById(productId);
-        if(foundProduct.isPresent()) {
+        Optional<Product> foundCategory = productRepository.findById(productId);
+        if(foundCategory.isPresent()) {
             product.setId(productId);
-            product.setCategory(foundProduct.get().getCategory());
+            product.setCategory(foundCategory.get().getCategory());
             productRepository.save(product);
             return new GlobalResponseHandler().handleResponse("Product updated successfully",
                     product, HttpStatus.OK, request);
