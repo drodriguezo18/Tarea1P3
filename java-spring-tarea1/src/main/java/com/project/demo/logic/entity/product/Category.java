@@ -1,7 +1,8 @@
 package com.project.demo.logic.entity.product;
 
-
+import com.project.demo.logic.entity.product.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,17 +17,11 @@ public class Category {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonBackReference
-    private List<Product> products;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-    public Category() {
-
-    }
-    public Category(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 
     public Long getId() {
         return id;
@@ -51,12 +46,16 @@ public class Category {
         this.description = description;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setProduct(Product product) {
+        this.product = product;
     }
+
+
+
+
 
 }
